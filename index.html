@@ -7,6 +7,14 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="투자계산기">
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DW2NGLLSWT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DW2NGLLSWT');
+</script>
 <title>투플 투자 계산기</title>
 <meta property="og:title" content="투플 투자 계산기">
 <meta property="og:description" content="주식·코인 수익률, 평단가, 청산가 계산기">
@@ -916,6 +924,9 @@ function switchPanel(name) {
   document.getElementById('panel-' + name).classList.add('active');
   document.getElementById('nav-' + name).classList.add('active');
   showRandomQuote();
+  if (typeof gtag === 'function') {
+    gtag('event', 'tab_click', { tab_name: name });
+  }
 }
 
 
@@ -998,6 +1009,7 @@ function calcProfit() {
 
   document.getElementById('profit-result').style.display = 'block';
   scrollToResult('profit-result');
+  if (typeof gtag === 'function') gtag('event', 'calculate', { calc_type: 'profit' });
   const rateEl = document.getElementById('pr-rate');
   rateEl.textContent = pct(rate);
   rateEl.className = 'main-val ' + (rate >= 0 ? 'profit' : 'loss');
@@ -1060,6 +1072,7 @@ function calcAvg() {
   const curPrice = parseNum(document.getElementById('avg-cur').value);
   document.getElementById('avg-result').style.display = 'block';
   scrollToResult('avg-result');
+  if (typeof gtag === 'function') gtag('event', 'calculate', { calc_type: 'average' });
   document.getElementById('avg-price').textContent = fmtFlex(avgPrice);
   document.getElementById('avg-total').textContent = fmt(totalCost);
   document.getElementById('avg-qty').textContent = fmtQty(totalQty);
@@ -1137,6 +1150,7 @@ function calcReverseAvg() {
   }
   document.getElementById('rev-result').style.display = 'block';
   scrollToResult('rev-result');
+  if (typeof gtag === 'function') gtag('event', 'calculate', { calc_type: 'water_down' });
 }
 
 function calcCustomEntry() {
@@ -1190,6 +1204,7 @@ function calcTarget() {
 
   document.getElementById('target-result').style.display = 'block';
   scrollToResult('target-result');
+  if (typeof gtag === 'function') gtag('event', 'calculate', { calc_type: 'target' });
   document.getElementById('t-target-price').textContent = targetPrice ? fmtFlex(targetPrice) : '-';
   document.getElementById('t-stop-price').textContent = stopPrice ? fmtFlex(stopPrice) : '-';
   document.getElementById('t-bep').textContent = fmtFlex(bep);
@@ -1274,6 +1289,7 @@ function calcCompound() {
 
   document.getElementById('compound-result').style.display = 'block';
   scrollToResult('compound-result');
+  if (typeof gtag === 'function') gtag('event', 'calculate', { calc_type: 'compound' });
   document.getElementById('c-final').textContent = fmt(finalBalance);
   document.getElementById('c-r-principal').textContent = fmt(principal);
   document.getElementById('c-r-invested').textContent = fmt(finalInvested);
@@ -1327,6 +1343,7 @@ function calc72() {
   const approx = (constMap[multi] || 72) / rate;
   document.getElementById('r72-result').style.display = 'block';
   scrollToResult('r72-result');
+  if (typeof gtag === 'function') gtag('event', 'calculate', { calc_type: 'rule72' });
   document.getElementById('r72-years').textContent = exact.toFixed(2) + '년';
   document.getElementById('r72-desc').textContent = `연 ${rate}% 수익률로 ${multi}배가 되기까지 걸리는 시간`;
   document.getElementById('r72-exact').textContent = exact.toFixed(2) + '년';
@@ -1433,6 +1450,7 @@ function calcLiqSingle() {
 
   document.getElementById('liq-single-result').style.display = 'block';
   scrollToResult('liq-single-result');
+  if (typeof gtag === 'function') gtag('event', 'calculate', { calc_type: 'liquidation_single' });
   // 청산가 음수 또는 비현실적 처리
   const isVeryHigh = side === 'short' && liqPrice > entry * 5;
   const liqDisplay = liqPrice <= 0 ? '청산 없음 (0 이하)' : (isVeryHigh ? `${fmtFlex(liqPrice)} (청산 위험 매우 낮음)` : fmtFlex(liqPrice));
@@ -1556,6 +1574,7 @@ function calcLiqSplit() {
 
   document.getElementById('liq-split-result').style.display = 'block';
   scrollToResult('liq-split-result');
+  if (typeof gtag === 'function') gtag('event', 'calculate', { calc_type: 'liquidation_split' });
   document.getElementById('liq-sp-price').textContent = fmtFlex(liqPrice);
   document.getElementById('liq-sp-avg').textContent = fmtFlex(avgEntry);
   document.getElementById('liq-sp-qty').textContent = fmtQty(totalQty);
